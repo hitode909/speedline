@@ -5,5 +5,5 @@
 ```
 $ gem install bundler
 $ bundle install
-$ rackup
+$ memcached & bundle exec -- rackup
 ```
