@@ -18,7 +18,7 @@ class SpeedLineApp < Sinatra::Base
       halt 400, 'url required'
     end
 
-    unless url.match(/^http/i)
+    unless url.match(/^https?:\/\//i)
       halt 400, 'url required'
     end
 
