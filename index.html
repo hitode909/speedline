@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>
+      集中線GIFメーカー
+    </title>
+  </head>
+  <body>
+    <h1>集中線GIFメーカー</h1>
+    <p>
+      画像のURLを指定すると，集中線をくっつけます．<br>
+      アニメーションGIFのURLを指定すると，集中線入りのアニメーションGIFになります．<br>
+      集中したいときに便利．
+    </p>
+    <form method="GET" action="/process">
+      <label>
+        画像のURL
+        <input type="url" size="100" name="url" placeholder="http://" />
+      </label>
+      <input type="submit" value="作る" />
+    </form>
+
+    <h2>例</h2>
+
+    <p>
+      <a href="/process?url=https://i.gyazo.com/5371f174a621a3e03ed2250f5d4789f4.png"><img src="/process?url=https://i.gyazo.com/5371f174a621a3e03ed2250f5d4789f4.png"></a>
+    </p>
+
+    <p>
+      <a href="/process?url=https://i.gyazo.com/09709f3625bfa08d5e15f7d68fbb971c.gif"><img src="/process?url=https://i.gyazo.com/09709f3625bfa08d5e15f7d68fbb971c.gif"></a>
+    </p>
+
+    <a href="https://github.com/hitode909/speedline"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+  </body>
+</html>
