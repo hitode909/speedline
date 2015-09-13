@@ -27,7 +27,7 @@ class SpeedLineApp < Sinatra::Base
 
     content = SpeedLine.new.apply_for_url(url)
 
-    cache.set(url, content, 3600)
+    cache.set(url, content, 3600*24)
 
     content
   end
