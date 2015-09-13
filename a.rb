@@ -30,12 +30,19 @@ def append_line(image)
   image
 end
 
-url = ARGV.first
-source = open(url).read
-source_image = Magick::Image.from_blob(source).first
-gif = Magick::ImageList.new
+filename = ARGV.first
+images = Magick::ImageList.new(filename)
 
-3.times {
-  gif << append_line(source_image.clone)
+if images.length > 1
+  gif = images
+else
+  gif = Magick::ImageList.new
+  3.times {
+    gif << append_line(images.first.clone)
+  }
+end
+
+gif.each{|image|
+  append_line(image)
 }
-gif.write 'a.gif'
+gif.optimize_layers(Magick::OptimizeTransLayer).deconstruct.write 'a.gif'
