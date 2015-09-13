@@ -30,8 +30,8 @@ def append_line(image)
   image
 end
 
-filename = ARGV.first
-images = Magick::ImageList.new(filename)
+url = ARGV.first
+images = Magick::ImageList.new.from_blob(open(url).read)
 
 if images.length > 1
   gif = images
