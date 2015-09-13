@@ -4,35 +4,38 @@ Bundler.require
 
 require 'open-uri'
 
-url = ARGV.first
+def append_line(image)
+  draw = Magick::Draw.new
+  draw.fill('black')
 
-source = open(url).read
+  center = [ image.columns / 2, image.rows / 2]
 
-source_image = Magick::Image.from_blob(source).first
+  radius_center = 0.75
+  step = 0.02
+  bold = 1.0
+  theeta = 0
+  while theeta < Math::PI*2 do
+    step_noise = rand + 0.5
+    theeta += step * step_noise
+    radius_center_noise = rand*0.3+1.0
+    bold_noise = rand*0.7+0.3
+    line_center = [Math.sin(theeta) * center[0] *radius_center * radius_center_noise + center[0], Math.cos(theeta) * center[1] *radius_center * radius_center_noise + center[1]]
+    point = [Math.sin(theeta) * center[0] * 2 + center[0], Math.cos(theeta) * center[1] * 2 + center[1]]
+    point2 = [Math.sin(theeta+step*bold*bold_noise) * center[0] * 2 + center[0], Math.cos(theeta+step*bold*bold_noise) * center[1] * 2 + center[1]]
 
-p source_image
-CENTER = [ source_image.columns / 2, source_image.rows / 2]
+    draw.polygon( *line_center,   *point,  *point2)
+  end
 
-draw = Magick::Draw.new
-
-draw.fill('black')
-
-radius_center = 0.75
-step = 0.02
-bold = 1.0
-theeta = 0
-while theeta < Math::PI*2 do
-  step_noise = rand + 0.5
-  theeta += step * step_noise
-  radius_center_noise = rand*0.3+1.0
-  bold_noise = rand*0.7+0.3
-  center = [Math.sin(theeta) * CENTER[0] *radius_center * radius_center_noise + CENTER[0], Math.cos(theeta) * CENTER[1] *radius_center * radius_center_noise + CENTER[1]]
-  point = [Math.sin(theeta) * CENTER[0] * 2 + CENTER[0], Math.cos(theeta) * CENTER[1] * 2 + CENTER[1]]
-  point2 = [Math.sin(theeta+step*bold*bold_noise) * CENTER[0] * 2 + CENTER[0], Math.cos(theeta+step*bold*bold_noise) * CENTER[1] * 2 + CENTER[1]]
-
-  draw.polygon( *center,   *point,  *point2)
+  draw.draw(image)
+  image
 end
 
-draw.draw(source_image)
+url = ARGV.first
+source = open(url).read
+source_image = Magick::Image.from_blob(source).first
+gif = Magick::ImageList.new
 
-source_image.write('_.jpg')
+3.times {
+  gif << append_line(source_image.clone)
+}
+gif.write 'a.gif'
