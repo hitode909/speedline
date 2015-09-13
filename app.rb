@@ -18,6 +18,10 @@ class SpeedLineApp < Sinatra::Base
       halt 400, 'url required'
     end
 
+    unless url.match(/^http/i)
+      halt 400, 'url required'
+    end
+
     content_type 'image/gif'
 
     cache = Dalli::Client.new
