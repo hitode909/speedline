@@ -4,45 +4,14 @@ Bundler.require
 
 require 'open-uri'
 
-def append_line(image)
-  draw = Magick::Draw.new
-  draw.fill('black')
+$:.unshift(File.join(File.dirname(__FILE__), 'lib'))
 
-  center = [ image.columns / 2, image.rows / 2]
-
-  radius_center = 0.75
-  step = 0.02
-  bold = 1.0
-  theeta = 0
-  while theeta < Math::PI*2 do
-    step_noise = rand + 0.5
-    theeta += step * step_noise
-    radius_center_noise = rand*0.3+1.0
-    bold_noise = rand*0.7+0.3
-    line_center = [Math.sin(theeta) * center[0] *radius_center * radius_center_noise + center[0], Math.cos(theeta) * center[1] *radius_center * radius_center_noise + center[1]]
-    point = [Math.sin(theeta) * center[0] * 2 + center[0], Math.cos(theeta) * center[1] * 2 + center[1]]
-    point2 = [Math.sin(theeta+step*bold*bold_noise) * center[0] * 2 + center[0], Math.cos(theeta+step*bold*bold_noise) * center[1] * 2 + center[1]]
-
-    draw.polygon( *line_center,   *point,  *point2)
-  end
-
-  draw.draw(image)
-  image
-end
+require 'speedline'
 
 url = ARGV.first
-images = Magick::ImageList.new.from_blob(open(url).read)
 
-if images.length > 1
-  gif = images
-else
-  gif = Magick::ImageList.new
-  3.times {
-    gif << append_line(images.first.clone)
-  }
-end
+content = SpeedLine.new.apply_for_url(url)
 
-gif.each{|image|
-  append_line(image)
+open('out.gif', 'w') {|f|
+  f.write content
 }
-gif.optimize_layers(Magick::OptimizeTransLayer).deconstruct.write 'a.gif'
