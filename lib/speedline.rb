@@ -1,6 +1,9 @@
 require 'open-uri'
 require 'RMagick'
 
+# ## License
+# MIT
+
 class SpeedLine
   def apply_for_url(url)
     images = Magick::ImageList.new.from_blob(open(url).read)
